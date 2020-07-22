@@ -74,10 +74,11 @@ app.get('/scrape/properati/:pageNumber', function (req, res) {
         const title = $(this).find('.picture .carousel img').attr('alt');
         const description = $(this).find('.picture .carousel img').attr('alt');
         const timestamp = $(this).find('.date-added').text().trim();
-        const rooms = $(this).find('.rooms').children().remove().end().text().trim();
+        const commonInfo = $(this).find('.rooms').text();
+        const ambients = commonInfo.includes('ambiente') ? commonInfo.charAt(commonInfo.indexOf('ambiente') - 2).trim() : '';
         const area = $(this).find('.area').text().trim();
 
-        console.log(area);
+        console.log(ambients);
 
         // Push the properties to the array
         properties.push({
@@ -90,7 +91,7 @@ app.get('/scrape/properati/:pageNumber', function (req, res) {
           location: location,
           description: description,
           timestamp: timestamp,
-          rooms: rooms,
+          ambients: ambients,
           area: area,
         });
       });
