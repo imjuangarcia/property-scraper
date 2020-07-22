@@ -1,0 +1,12 @@
+{
+  "name": "property-scraper",
+  "version": "1.0.0",
+  "description": "Property Scraper",
+  "main": "server.js",
+  "author": "Juan Martín García",
+  "dependencies": {
+    "express": "latest",
+    "request": "latest",
+    "cheerio": "latest"
+  }
+}
