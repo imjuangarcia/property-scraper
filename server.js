@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const request = require('request');
 const cheerio = require('cheerio');
-const { parse } = require('path');
 const app = express();
 
 app.get('/scrape/argenprop/:pageNumber', function (req, res) {
@@ -20,27 +19,38 @@ app.get('/scrape/argenprop/:pageNumber', function (req, res) {
       $('.listing__item').filter(function() {
         const url = $(this).children().first().attr('href');
         const image = $(this).find('.card__photos li img').attr('data-src');
-        const price = $(this).find('.card__monetary-values').text().trim();
+        let price = $(this).find('.card__monetary-values').text().trim();
+
+        // If it's consultar precio, we set it to 0
+        if(price === 'Consultar precio') {
+          price = 0;
+        } else {
+          // If it's a value, we remove the $ and .
+          price = price.substring(2).split('.').join('');
+        }
+
         const address = $(this).find('.card__address').text().trim();
         const title = $(this).find('.card__title').text().trim();
         const description = $(this).find('.card__card__info').text().trim();
         const commonInfo = $(this).find('.card__common-data').text();
-        const area = commonInfo.substring(0, commonInfo.indexOf('m²'));
+        const area = commonInfo.substring(0, commonInfo.indexOf('m²')).trim();
         const ambients = commonInfo.includes('dormitorio') ? commonInfo.charAt(commonInfo.indexOf('dormitorio') -2).trim() : '';
         const toilets = commonInfo.includes('baño') ? commonInfo.charAt(commonInfo.indexOf('baño') - 2).trim() : '';
+
+        console.log(parseInt(toilets));
 
         // Push the properties to the array
         properties.push({
           url: url,
           image: image,
-          price: price,
+          price: parseInt(price),
           address: address,
           title: title,
           description: description,
           commonInfo: commonInfo,
-          area: area,
-          ambients: ambients,
-          toilets: toilets,
+          area: parseInt(area),
+          ambients: parseInt(ambients),
+          toilets: parseInt(toilets),
         });
       });
     }
@@ -68,7 +78,7 @@ app.get('/scrape/properati/:pageNumber', function (req, res) {
       $('article.item').filter(function() {
         const url = $(this).find('.picture a').attr('href');
         const image = $(this).find('.picture .carousel img').attr('src');
-        const price = $(this).find('.price').children().remove().end().text().trim();
+        const price = $(this).find('.price').children().remove().end().text().trim().substring(2).split('.').join('');
         const expenses = $(this).find('.price span').text().trim();
         const address = $(this).find('.address').text().trim();
         const location = $(this).find('.location').text().trim();
@@ -77,21 +87,20 @@ app.get('/scrape/properati/:pageNumber', function (req, res) {
         const timestamp = $(this).find('.date-added').text().trim();
         const commonInfo = $(this).find('.rooms').text();
         const ambients = commonInfo.includes('ambiente') ? commonInfo.charAt(commonInfo.indexOf('ambiente') - 2).trim() : '';
-        const area = $(this).find('.area').text().trim();
+        const area = $(this).find('.area').text().replace('m²', '').trim();
 
         // Push the properties to the array
         properties.push({
           url: url,
           image: image,
-          price: price,
-          expenses: expenses,
+          price: parseInt(price),
           address: address,
           title: title,
           location: location,
           description: description,
           timestamp: timestamp,
-          ambients: ambients,
-          area: area,
+          ambients: parseInt(ambients),
+          area: parseInt(area),
         });
       });
     }
@@ -120,14 +129,12 @@ app.get('/scrape/meli/:pageNumber', function (req, res) {
         const url = $(this).find('.images-viewer').attr('item-url');
         const image = $(this).find('.item__image img').attr('src') || $(this).find('.loading').attr('data-src');
         const title = $(this).find('.item__image img').attr('alt') || $(this).find('.loading').attr('alt');
-        const price = $(this).find('.price__fraction').text().split('.').join("");
+        const price = $(this).find('.price__fraction').text();
         const address = $(this).find('.item_subtitle span').text().trim();
         const location = $(this).find('.item__title').text().trim();
         const commonInfo = $(this).find('.item__attrs').text();
         const ambients = commonInfo.charAt(commonInfo.indexOf('|') + 2);
         const area = commonInfo.substring(0, commonInfo.indexOf('m²'));
-
-        console.log(area);
 
         // Push the properties to the array
         properties.push({
@@ -152,6 +159,5 @@ app.get('/scrape/meli/:pageNumber', function (req, res) {
   });
 });
 
-app.listen('8081')
-console.log('http://localhost:8081/');
+app.listen('8081');
 exports = module.exports = app;
