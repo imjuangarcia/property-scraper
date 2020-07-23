@@ -79,7 +79,6 @@ app.get('/scrape/properati/:pageNumber', function (req, res) {
         const url = $(this).find('.picture a').attr('href');
         const image = $(this).find('.picture .carousel img').attr('src');
         const price = $(this).find('.price').children().remove().end().text().trim().substring(2).split('.').join('');
-        const expenses = $(this).find('.price span').text().trim();
         const address = $(this).find('.address').text().trim();
         const location = $(this).find('.location').text().trim();
         const title = $(this).find('.picture .carousel img').attr('alt');
