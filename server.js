@@ -146,7 +146,7 @@ app.get('/scrape/meli/:pageNumber', function (req, res) {
       console.log('File successfully written.');
     })
 
-    res.send('Check your console');
+    res.redirect(`/scrape/meli/${parseInt(req.params.pageNumber) + 1}`);
   });
 });
 
