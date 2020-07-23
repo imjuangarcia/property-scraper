@@ -4,14 +4,14 @@ const request = require('request');
 const cheerio = require('cheerio');
 const app = express();
 
+// Array to hold the properties
+const properties = [];
+
 app.get('/scrape/argenprop/:pageNumber', function (req, res) {
   // Casa alquiler zona norte, menor precio
   url = `https://www.argenprop.com/casa-alquiler-region-zona-norte-orden-menorprecio-pagina-${req.params.pageNumber}`;
 
   request(url, function (error, response, html) {
-    // Array to hold the properties
-    const properties = [];
-    
     if (!error) {
       const $ = cheerio.load(html);
 
@@ -37,8 +37,6 @@ app.get('/scrape/argenprop/:pageNumber', function (req, res) {
         const ambients = commonInfo.includes('dormitorio') ? commonInfo.charAt(commonInfo.indexOf('dormitorio') -2).trim() : '';
         const toilets = commonInfo.includes('baño') ? commonInfo.charAt(commonInfo.indexOf('baño') - 2).trim() : '';
 
-        console.log(parseInt(toilets));
-
         // Push the properties to the array
         properties.push({
           url: url,
@@ -55,11 +53,11 @@ app.get('/scrape/argenprop/:pageNumber', function (req, res) {
       });
     }
 
-    fs.appendFile('argenprop.json', JSON.stringify(properties, null, 4), function (err) {
+    fs.writeFile('data/argenprop.json', JSON.stringify(properties, null, 4), function (err) {
       console.log('File successfully written.');
     })
 
-    res.send('Check your console');
+    res.redirect(`/scrape/argenprop/${parseInt(req.params.pageNumber) + 1}`);
   });
 });
 
@@ -68,9 +66,6 @@ app.get('/scrape/properati/:pageNumber', function (req, res) {
   url = `https://www.properati.com.ar/casa/alquiler/ord:p-a_en:escobar,maschwitz,bs-as-g-b-a-zona-norte/${req.params.pageNumber}/`;
 
   request(url, function (error, response, html) {
-    // Array to hold the properties
-    const properties = [];
-    
     if (!error) {
       const $ = cheerio.load(html);
 
@@ -104,11 +99,11 @@ app.get('/scrape/properati/:pageNumber', function (req, res) {
       });
     }
 
-    fs.appendFile('properati.json', JSON.stringify(properties, null, 4), function (err) {
+    fs.writeFile('data/properati.json', JSON.stringify(properties, null, 4), function (err) {
       console.log('File successfully written.');
     })
 
-    res.send('Check your console');
+    res.redirect(`/scrape/properati/${parseInt(req.params.pageNumber) + 1}`);
   });
 });
 
@@ -117,9 +112,6 @@ app.get('/scrape/meli/:pageNumber', function (req, res) {
   url = `https://inmuebles.mercadolibre.com.ar/casas/alquiler/bsas-gba-norte/_Desde_${req.params.pageNumber + 48}_OrderId_PRICE`;
 
   request(url, function (error, response, html) {
-    // Array to hold the properties
-    const properties = [];
-    
     if (!error) {
       const $ = cheerio.load(html);
 
@@ -150,7 +142,7 @@ app.get('/scrape/meli/:pageNumber', function (req, res) {
       });
     }
 
-    fs.appendFile('meli.json', JSON.stringify(properties, null, 4), function (err) {
+    fs.writeFile('data/meli.json', JSON.stringify(properties, null, 4), function (err) {
       console.log('File successfully written.');
     })
 
