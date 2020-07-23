@@ -48,8 +48,6 @@ exports.scraper = function (req, res) {
           ambients: parseInt(ambients),
           area: parseInt(area),
         });
-
-        console.log(properties);
       });
     }
 
