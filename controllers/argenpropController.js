@@ -29,7 +29,7 @@ exports.scraper = function (req, res) {
 
         const address = $(this).find('.card__address').text().trim();
         const title = $(this).find('.card__title').text().trim();
-        const description = $(this).find('.card__card__info').text().trim();
+        const description = $(this).find('.card__info').text().trim();
         const commonInfo = $(this).find('.card__common-data').text();
         const area = commonInfo.substring(0, commonInfo.indexOf('m²')).trim();
         const ambients = commonInfo.includes('dormitorio') ? commonInfo.charAt(commonInfo.indexOf('dormitorio') - 2).trim() : '';
