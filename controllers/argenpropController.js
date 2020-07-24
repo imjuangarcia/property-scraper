@@ -37,8 +37,6 @@ exports.scraper = function (req, res) {
         const area = commonInfo.substring(0, commonInfo.indexOf('m²')).trim();
         const ambients = commonInfo.includes('dormitorio') ? commonInfo.charAt(commonInfo.indexOf('dormitorio') - 2).trim() : '';
         const toilets = commonInfo.includes('baño') ? commonInfo.charAt(commonInfo.indexOf('baño') - 2).trim() : '';
-
-        console.log(price);
         
         // Push the properties to the array
         properties.push({

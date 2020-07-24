@@ -35,8 +35,6 @@ exports.scraper = function (req, res) {
         const ambients = commonInfo.includes('ambiente') ? commonInfo.charAt(commonInfo.indexOf('ambiente') - 2).trim() : '';
         const area = $(this).find('.area').text().replace('m²', '').trim();
 
-        console.log(price);
-
         // Push the properties to the array
         properties.push({
           url: url,

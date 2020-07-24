@@ -32,8 +32,6 @@ exports.scraper = function (req, res) {
         const ambients = commonInfo.charAt(commonInfo.indexOf('|') + 2);
         const area = commonInfo.substring(0, commonInfo.indexOf('m²'));
 
-        console.log(price);
-
         // Push the properties to the array
         properties.push({
           url: url,
