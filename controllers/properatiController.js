@@ -21,9 +21,9 @@ exports.scraper = function (req, res) {
 
         // Trim it based on whether its usd or argentine peso
         if (price.includes('U$S')) {
-          price = price.substring(4).split('.').join('')
+          price = parseInt(price.substring(4).split('.').join('')) * 140;
         } else {
-          price = price.substring(2).split('.').join('')
+          price = price.substring(2).split('.').join('');
         }
 
         const address = $(this).find('.address').text().trim();
@@ -34,6 +34,8 @@ exports.scraper = function (req, res) {
         const commonInfo = $(this).find('.rooms').text();
         const ambients = commonInfo.includes('ambiente') ? commonInfo.charAt(commonInfo.indexOf('ambiente') - 2).trim() : '';
         const area = $(this).find('.area').text().replace('m²', '').trim();
+
+        console.log(price);
 
         // Push the properties to the array
         properties.push({

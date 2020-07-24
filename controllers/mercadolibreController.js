@@ -18,12 +18,21 @@ exports.scraper = function (req, res) {
         const url = $(this).find('.images-viewer').attr('item-url');
         const image = $(this).find('.item__image img').attr('src') || $(this).find('.loading').attr('data-src');
         const title = $(this).find('.item__image img').attr('alt') || $(this).find('.loading').attr('alt');
-        const price = $(this).find('.price__fraction').text().split('.').join('');
+        let price = $(this).find('.price__fraction').text().split('.').join('');
+        const currency = $(this).find('.price__symbol').text();
+
+        // To adjust the value from usd to argentine peso
+        if (currency.includes('U$S')) {
+          price = parseInt(price) * 140;
+        }
+
         const address = $(this).find('.item_subtitle span').text().trim();
         const location = $(this).find('.item__title').text().trim();
         const commonInfo = $(this).find('.item__attrs').text();
         const ambients = commonInfo.charAt(commonInfo.indexOf('|') + 2);
         const area = commonInfo.substring(0, commonInfo.indexOf('m²'));
+
+        console.log(price);
 
         // Push the properties to the array
         properties.push({

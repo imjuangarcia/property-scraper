@@ -22,9 +22,12 @@ exports.scraper = function (req, res) {
         // If it's consultar precio, we set it to 0
         if (price === 'Consultar precio') {
           price = 0;
-        } else {
-          // If it's a value, we remove the $ and .
+        } 
+        // Trim it based on whether its usd or argentine peso
+        else if (price.includes('$')) {
           price = price.substring(2).split('.').join('');
+        } else if (price.includes('USD')) {
+          price = parseInt(price.substring(4).split('.').join('')) * 140;
         }
 
         const address = $(this).find('.card__address').text().trim();
@@ -35,6 +38,8 @@ exports.scraper = function (req, res) {
         const ambients = commonInfo.includes('dormitorio') ? commonInfo.charAt(commonInfo.indexOf('dormitorio') - 2).trim() : '';
         const toilets = commonInfo.includes('baño') ? commonInfo.charAt(commonInfo.indexOf('baño') - 2).trim() : '';
 
+        console.log(price);
+        
         // Push the properties to the array
         properties.push({
           url: url,
