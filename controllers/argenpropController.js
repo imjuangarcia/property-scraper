@@ -40,7 +40,7 @@ exports.scraper = function (req, res) {
         
         // Push the properties to the array
         properties.push({
-          url: url,
+          url: 'http://www.argenprop.com' + url,
           image: image,
           price: parseInt(price),
           address: address,
