@@ -5,8 +5,9 @@
   "main": "server.js",
   "author": "Juan Martín García",
   "dependencies": {
+    "cheerio": "latest",
     "express": "latest",
-    "request": "latest",
-    "cheerio": "latest"
+    "nightmare": "^3.0.2",
+    "request": "latest"
   }
 }
