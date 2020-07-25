@@ -19,7 +19,7 @@ exports.scraper = function (req, res) {
 
     $('.posting-card').filter(function () {
       const url = $(this).attr('data-to-posting').trim();
-      const image = $(this).find('img.flickity-lazyloaded') !== undefined ? $(this).find('img.flickity-lazyloaded').attr('src') : $(this).find('img.lazy-loading').attr('data-src');
+      const image = $(this).find('img.flickity-lazyloaded').attr('src') || $(this).find('.posting-gallery-holder img').attr('data-src');
       const address = $(this).find('.posting-location').text().trim();
       let price = $(this).find('.first-price').text().trim();
 
@@ -39,7 +39,7 @@ exports.scraper = function (req, res) {
 
       // Push the properties to the array
       properties.push({
-        url: 'http://www.zonaprop.com' + url,
+        url: 'http://www.zonaprop.com.ar' + url,
         image: image,
         address: address,
         title: title,
